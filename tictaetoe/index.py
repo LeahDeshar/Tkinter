@@ -73,6 +73,9 @@ def check_game_over():
 def update_score():
     score_label.config(text=f"Human: {human_score} | Computer: {computer_score}")
 
+
+
+# Create window 
 root = tk.Tk()
 root.title("Tic-Tae-Toe")
 root.geometry("500x500+400+150")
