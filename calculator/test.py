@@ -1,119 +1,77 @@
-from tkinter import *
-from tkinter import ttk
+from tkinter import PhotoImage
+import tkinter as tk
 
-def operation(value1,value2, fakeoperator):
-    global lastResult
+color = {"primary": "#212021", "orange": "#fff", "darkorange": "#212021","red": "#3b3b3b"}
 
-    if(type(value1)==float or type(value1)==int and type(value2)==float or type(value2)==int ):
-        print(value1)
-        print(value2)
-        print(fakeoperator)
-        match fakeoperator:
-            case "+":
-                return  value1 + value2
-            case "-": 
-                return value1 - value2
-            case "*":
-                return value1 * value2
-            case "/":   
-                return  value1 / value2
-            case default:
-                return 
+root = tk.Tk()
+root.title("Tkinter Navbar")
+root.config(bg=color["primary"])
+root.geometry("400x600+850+50")
 
+# Configure rows and columns
+root.rowconfigure(0, weight=1)
+root.columnconfigure(0, weight=1)
 
-def clearButton():
-    global currentValue
-    global lastResult
-    currentValue = 0
-    lastResult = 0
-    screenUpdate(0)
+btnState = False
 
+navIcon = PhotoImage(file="menu.png", height=50, width=50)
+closeIcon = PhotoImage(file="menu.png", height=50, width=50)
 
-root = Tk()
-root.geometry("700x700")
+def switch():
+    global btnState
+    if btnState is True:
+        for x in range(301):
+            navRoot.place(x=-x, y=0)
+            topFrame.update()
 
-lastResult = 0
-currentValue = 0
-temporaryValue = 0
-operator = ""
-
-lastresultBox = ttk.Label(text="Samundra is Code God",borderwidth=5,relief='solid',foreground="gray",font=24,width=20)
-lastresultBox.grid(row=1,column=1,columnspan=7,pady=5)
-
-displayBox = ttk.Label(text="0",borderwidth=5,relief='solid',foreground="red",font=24,width=20)
-displayBox.grid(row=2,column=1,columnspan=7,pady=5)
-
-def screenUpdate(clickedValue):
-    global currentValue 
-    currentValue = currentValue * 10 + clickedValue
-    displayBox.configure(text=currentValue)
-    lastresultBox.configure(text=lastResult)
-    
-
-def EqualUpdate():
-    global lastResult
-    global currentValue
-    global operator
-
-    lastResult = operation(lastResult,currentValue,operator)
-    lastresultBox.configure(text=lastResult)
-
-    currentValue = 0
-    displayBox.configure(text=currentValue)
-
-def OperatorsClicked(sign):
-    global operator
-    global lastResult
-    global currentValue
-
-    if(lastResult!=0):
-        lastResult = operation(lastResult,currentValue,operator)
+        brandLabel.config(bg=color["primary"], fg="green")
+        root.config(bg=color["primary"])
+        btnState = False
     else:
-        lastResult = currentValue
+        brandLabel.config(bg=color["primary"], fg="#5F5A33")
+        homeLabel.config(bg=color["primary"])
+        topFrame.config(bg=color["primary"])
+        root.config(bg=color["darkorange"])
 
-    operator = sign    
-    currentValue = 0
-    screenUpdate(0)
+        for x in range(-300, 0):
+            navRoot.place(x=x, y=0)
+            topFrame.update()
 
+        btnState = True
 
-button1 = ttk.Button(text="1",width=5,command=lambda:screenUpdate(1))
-button1.grid(row=5,column=1)
-button2 = ttk.Button(text="2",width=5,command=lambda:screenUpdate(2))
-button2.grid(row=5,column=3)
-button3 = ttk.Button(text="3",width=5,command=lambda:screenUpdate(3))
-button3.grid(row=5,column=5)
-buttonClear = ttk.Button(text="C",width=5,command=lambda:clearButton())
-buttonClear.grid(row=5,column=7)
+topFrame = tk.Frame(root, bg=color["primary"])
+topFrame.grid(row=0, column=0, sticky="ew")
 
-button4 = ttk.Button(text="4",width=5,command=lambda:screenUpdate(4))
-button4.grid(row=7,column=1)
-button5 = ttk.Button(text="5",width=5,command=lambda:screenUpdate(5))
-button5.grid(row=7,column=3)
-button6 = ttk.Button(text="6",width=5,command=lambda:screenUpdate(6))
-button6.grid(row=7,column=5)
-buttonPlus = ttk.Button(text="+",width=5, command= lambda:OperatorsClicked("+"))
-buttonPlus.grid(row=7,column=7)
+homeLabel = tk.Button(topFrame, text="history", bg=color["orange"], bd=0, command=switch)
+homeLabel.pack(side="right")
 
-button7 = ttk.Button(text="7",width=5,command=lambda:screenUpdate(7))
-button7.grid(row=9,column=1)
-button8 = ttk.Button(text="8",width=5,command=lambda:screenUpdate(8))
-button8.grid(row=9,column=3)
-button9 = ttk.Button(text="9",width=5,command=lambda:screenUpdate(9))
-button9.grid(row=9,column=5)
-buttonMultiply = ttk.Button(text="*",width=5,command=lambda:OperatorsClicked("*"))
-buttonMultiply.grid(row=9,column=7)
+brandLabel = tk.Label(root, text="Pythonista\nEmpire", font="System 30", bg="gray17", fg="green")
+brandLabel.place(x=100, y=250)
 
-button0 = ttk.Button(text="0",width=13,command=lambda:screenUpdate(0))
-button0.grid(row=11,column=1,columnspan=4)
-buttonSubtract = ttk.Button(text="-",width=5,command= lambda:OperatorsClicked("-"))
-buttonSubtract.grid(row=11,column=5)
-buttonDivide = ttk.Button(text="/",width=5,command= lambda:OperatorsClicked("/"))
-buttonDivide.grid(row=11,column=7)
+navbarBtn = tk.Button(topFrame, text="☰", bg=color["darkorange"], bd=0, activebackground=color["darkorange"], command=switch)
+navbarBtn.place(x=10, y=10)
+standardLabel = tk.Button(topFrame, text="Standard", bg=color["primary"], bd=0, command=switch)
+standardLabel.pack(side="left", padx=50, pady=20)
 
+navRoot = tk.Frame(root, bg=color["red"], height=1000, width=300)
+navRoot.place(x=-300, y=0)
+tk.Label(navRoot, font="Bahnschrift 15", bg=color["red"], fg="black", height=2, width=300, padx=20).place(x=0, y=0)
+y = 80
 
-buttonEquals = Button(text="=",foreground='red',width=5,borderwidth=2, relief="groove",command=EqualUpdate)
-buttonEquals.grid(row=13,column=7)
+options = {
+    "Calculator": ["Standard", "Scientific", "Graphing", "Programmer", "Date calculation"],
+    "Converter" : ["Currency", "Volume", "Length", "Weight and mass", "Temperature", "Enery", "Area", "Speed", "Time", "Power"]
+}
 
+for key in options:
+    tk.Label(navRoot, text=key, font="Arial 12 bold", bg=color["red"], fg=color["orange"]).place(x=25, y=y)
+    y += 20  
 
+    for option in options[key]:
+        tk.Button(navRoot, text=option, font="Arial 9", bg=color["red"], fg=color["orange"],
+                  activebackground="gray17", activeforeground=color["darkorange"], bd=0).place(x=25, y=y)
+        y += 40  
+closeBtn = tk.Button(navRoot, text="☰", bg=color["red"], activebackground=color["darkorange"], bd=0, command=switch)
+closeBtn.place(x=10, y=10)
 
 root.mainloop()
