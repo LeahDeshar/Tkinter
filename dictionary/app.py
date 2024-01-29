@@ -42,20 +42,16 @@ label_word = ttk.Label(frame_search,
 label_word.grid(row=0,column=0,padx=5,pady=5)
 
 
-# Input field for the word
 entry_word =ttk.Entry(frame_search,width=20,font=('TkDefaultFont',15))
 entry_word.grid(row=0,column=1,padx=5,pady=5)
 
-# search button
 button_search = ttk.Button(frame_search,text="Search",command=search_definition)
 button_search.grid(row=0,column=2,padx=5,pady=5)
 
 
-# output frame
 frame_output = ttk.Frame(root)
 frame_output.pack(padx=20,pady=10)
 
-# text output for displaying the definition
 text_output = tk.Text(frame_output,height=10,state='disabled',font=('TkDefaultFont',15))
 text_output.pack()
 
