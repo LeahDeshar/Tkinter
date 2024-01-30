@@ -37,6 +37,5 @@ class AddBookWindow:
         else:
             self.student_tree.insert('', 'end', values=(book_name, author, isbn))
             
-        # self.book_tree.insert('', 'end', values=(book_name, author,isbn))
 
         self.window.destroy()

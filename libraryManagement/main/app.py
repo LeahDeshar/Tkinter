@@ -24,6 +24,12 @@ class LibraryManagementSystem:
         book_tab = ttk.Frame(notebook)
         notebook.add(book_tab, text="Books")
         self.create_book_tab(book_tab)
+        
+        self.student_count_label = tk.Label(root, text="Total Students: 0", font=('Helvetica', 12))
+        self.student_count_label.pack(pady=10)
+
+        self.book_count_label = tk.Label(root, text="Total Books: 0", font=('Helvetica', 12))
+        self.book_count_label.pack(pady=10)
 
     def create_student_tab(self, parent):
         self.student_tree = ttk.Treeview(parent, columns=('Name', 'Email','Phone Number','Address'))
@@ -70,7 +76,7 @@ class LibraryManagementSystem:
         delete_book_button.pack(pady=5)
 
     def add_student(self):
-        add_student_window = AddStudentWindow(self.root, self.student_tree)
+        add_student_window = AddStudentWindow(self.root, self.student_tree,self.update_counts)
 
     def update_student(self):
         selected_item = self.student_tree.selection()
@@ -82,7 +88,7 @@ class LibraryManagementSystem:
         ph_number = self.student_tree.item(selected_item, 'values')[2]
         address = self.student_tree.item(selected_item, 'values')[3]
 
-        update_student_window = AddStudentWindow(self.root, self.student_tree, self.update_student_func)
+        update_student_window = AddStudentWindow(self.root, self.student_tree, self.update_counts,self.update_student_func)
         update_student_window.name_entry.insert(0, name)
         update_student_window.email_entry.insert(0, email)
         update_student_window.number_entry.insert(0, ph_number)
@@ -101,6 +107,7 @@ class LibraryManagementSystem:
             return
 
         self.student_tree.delete(selected_item)
+        self.update_counts()
 
     # def add_book(self):
     #     add_book_window = AddBookWindow(self.root, self.book_tree)
@@ -110,6 +117,7 @@ class LibraryManagementSystem:
 
     def add_book_func(self, book_name, author, isbn):
         self.book_tree.insert('', 'end', values=(book_name, author, isbn))
+        self.update_counts()
 
     def update_book(self):
         selected_item = self.book_tree.selection()
@@ -138,6 +146,14 @@ class LibraryManagementSystem:
             return
 
         self.book_tree.delete(selected_item)
+        self.update_counts()
+        
+    def update_counts(self):
+        student_count = self.student_tree.get_children()
+        book_count = self.book_tree.get_children()
+
+        self.student_count_label.config(text=f"Total Students: {len(student_count)}")
+        self.book_count_label.config(text=f"Total Books: {len(book_count)}")
 
 if __name__ == "__main__":
     root = tk.Tk()
