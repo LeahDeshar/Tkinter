@@ -1,18 +1,37 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkbootstrap import Style
-
 from Book import AddBookWindow
 from Student import AddStudentWindow
-        
 class LibraryManagementSystem:
     def __init__(self, root):
         self.root = root
         self.root.title("Library Management System")
-        self.root.geometry("800x600")
+        self.root.geometry("600x400")
 
-        Style('darkly') 
-        notebook = ttk.Notebook(root)
+        Style('darkly')
+
+        self.notebook = ttk.Notebook(root)
+        self.notebook.pack(pady=10, expand=True, fill=tk.BOTH)
+
+        self.login_frame = ttk.Frame(self.notebook, style="TFrame")
+        self.notebook.add(self.login_frame, text="Login")
+        self.create_login_page(self.login_frame)
+
+        register_frame = ttk.Frame(self.notebook, style="TFrame")
+        self.notebook.add(register_frame, text="Register")
+        self.create_register_page(register_frame)
+
+        
+        # Dashboard Page
+        self.dashboard_frame = ttk.Frame(self.notebook, style="TFrame")
+        self.notebook.add(self.dashboard_frame, text="Dashboard")
+        self.notebook.tab(self.dashboard_frame, state="disabled")
+
+
+        # Initialize login status
+        self.logged_in = False
+        notebook = ttk.Notebook(self.dashboard_frame)
         notebook.pack(pady=10, fill=tk.BOTH, expand=True)
 
         student_tab = ttk.Frame(notebook)
@@ -152,42 +171,58 @@ class LibraryManagementSystem:
         self.student_count_label.config(text=f"Total Students: {len(student_count)}")
         self.book_count_label.config(text=f"Total Books: {len(book_count)}")
 
+    def create_login_page(self, frame):
+        # Create login page components
+        label_username = ttk.Label(frame, text="Username:")
+        label_password = ttk.Label(frame, text="Password:")
+        entry_username = ttk.Entry(frame)
+        entry_password = ttk.Entry(frame, show="*")
+        btn_login = ttk.Button(frame, text="Login", command=lambda: self.login(entry_username.get(), entry_password.get()))
 
-
-
-
-
-class LoginWindow:
-    def __init__(self, root, on_login_success):
-        self.root = root
-        self.on_login_success = on_login_success
-
-        self.root.title("Login")
-        self.root.geometry("400x300")
-        Style('darkly')
-
-        login_button = ttk.Button(self.root, text="Login", command=self.login)
-        login_button.pack(pady=10)
-
-    def login(self):
-        self.on_login_success()
+        label_username.grid(row=0, column=0, padx=10, pady=10, sticky=tk.E)
+        entry_username.grid(row=0, column=1, padx=10, pady=10, sticky=tk.W)
+        label_password.grid(row=1, column=0, padx=10, pady=10, sticky=tk.E)
+        entry_password.grid(row=1, column=1, padx=10, pady=10, sticky=tk.W)
+        btn_login.grid(row=2, column=1, pady=10)
         
-        
-        
-        
-def main():
-    root = tk.Tk()
 
-    def on_login_success():
-        login_window.root.destroy()  
-        dashboard_root = tk.Toplevel() 
-        dashboard_root.title("Dashboard")
-        Style('darkly')
-        
-        dashboard_window = LibraryManagementSystem(dashboard_root)
+    def create_register_page(self, frame):
+        # Create register page components
+        label_username = ttk.Label(frame, text="Username:")
+        label_password = ttk.Label(frame, text="Password:")
+        entry_username = ttk.Entry(frame)
+        entry_password = ttk.Entry(frame, show="*")
+        btn_register = ttk.Button(frame, text="Register", command=self.register)
 
-    login_window = LoginWindow(root, on_login_success)
-    root.mainloop()
+        # Place components on the grid
+        label_username.grid(row=0, column=0, padx=10, pady=10, sticky=tk.E)
+        entry_username.grid(row=0, column=1, padx=10, pady=10, sticky=tk.W)
+        label_password.grid(row=1, column=0, padx=10, pady=10, sticky=tk.E)
+        entry_password.grid(row=1, column=1, padx=10, pady=10, sticky=tk.W)
+        btn_register.grid(row=2, column=1, pady=10)
+
+    def login(self, username, password):
+        # Placeholder function for login
+        # Validate username and password (add your authentication logic here)
+        if username == "admin" and password == "admin":
+            self.logged_in = True
+            self.show_dashboard()
+
+    def register(self):
+        print("Register button clicked")
+
+   
+    
+    def show_dashboard(self):
+        if self.logged_in:
+        # Enable the Dashboard Page
+            self.notebook.tab(self.dashboard_frame, state="normal")
+            # Switch to the Dashboard Page
+            self.notebook.select(self.dashboard_frame)
+        else:
+            print("Login first!")
 
 if __name__ == "__main__":
-    main()
+    root = tk.Tk()
+    app = LibraryManagementSystem(root)
+    root.mainloop()
