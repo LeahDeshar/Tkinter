@@ -3,12 +3,18 @@ from tkinter import ttk
 from ttkbootstrap import Style
 from Book import AddBookWindow
 from Student import AddStudentWindow
+import sqlite3
+
 class LibraryManagementSystem:
     def __init__(self, root):
         self.root = root
         self.root.title("Library Management System")
         self.root.geometry("600x400")
-
+        
+        self.conn = sqlite3.connect('library.db')
+        self.create_tables()
+        
+        
         Style('darkly')
 
         self.notebook = ttk.Notebook(root)
@@ -49,6 +55,27 @@ class LibraryManagementSystem:
 
         self.book_count_label = tk.Label(root, text="Total Books: 0", font=('Helvetica', 12))
         self.book_count_label.pack(pady=10)
+
+    def create_tables(self):
+        with self.conn:
+            cursor = self.conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    email TEXT,
+                    phone_number TEXT,
+                    address TEXT
+                )
+            ''')
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS books (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    book_name TEXT,
+                    author TEXT,
+                    isbn TEXT
+                )
+            ''')      
 
     def create_student_tab(self, parent):
         self.student_tree = ttk.Treeview(parent, columns=('Name', 'Email','Phone Number','Address'))
@@ -187,7 +214,6 @@ class LibraryManagementSystem:
         
 
     def create_register_page(self, frame):
-        # Create register page components
         label_username = ttk.Label(frame, text="Username:")
         label_password = ttk.Label(frame, text="Password:")
         entry_username = ttk.Entry(frame)
@@ -201,8 +227,6 @@ class LibraryManagementSystem:
         btn_register.grid(row=2, column=1, pady=10)
 
     def login(self, username, password):
-        # Placeholder function for login
-        # Validate username and password (add your authentication logic here)
         if username == "admin" and password == "admin":
             self.logged_in = True
             self.show_dashboard()
