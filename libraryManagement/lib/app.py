@@ -18,9 +18,9 @@ class LibraryManagementSystem:
         self.notebook.add(self.login_frame, text="Login")
         self.create_login_page(self.login_frame)
 
-        register_frame = ttk.Frame(self.notebook, style="TFrame")
-        self.notebook.add(register_frame, text="Register")
-        self.create_register_page(register_frame)
+        self.register_frame = ttk.Frame(self.notebook, style="TFrame")
+        self.notebook.add(self.register_frame, text="Register")
+        self.create_register_page(self.register_frame)
 
         
         # Dashboard Page
@@ -194,7 +194,6 @@ class LibraryManagementSystem:
         entry_password = ttk.Entry(frame, show="*")
         btn_register = ttk.Button(frame, text="Register", command=self.register)
 
-        # Place components on the grid
         label_username.grid(row=0, column=0, padx=10, pady=10, sticky=tk.E)
         entry_username.grid(row=0, column=1, padx=10, pady=10, sticky=tk.W)
         label_password.grid(row=1, column=0, padx=10, pady=10, sticky=tk.E)
@@ -217,6 +216,9 @@ class LibraryManagementSystem:
         if self.logged_in:
         # Enable the Dashboard Page
             self.notebook.tab(self.dashboard_frame, state="normal")
+            self.notebook.tab(self.login_frame, state="hidden")
+            self.notebook.tab(self.register_frame, state="hidden")
+            
             # Switch to the Dashboard Page
             self.notebook.select(self.dashboard_frame)
         else:
