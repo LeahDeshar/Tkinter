@@ -1,3 +1,0 @@
-customtkinter
-customtkinter/examples
-documentation_images
